@@ -6,6 +6,6 @@
     Na aba consulta o usuario conseguirar visualizar as despesas registrada, poderar modificar ou excluir despesas da lista.
   
   </p>
-   <h4 aling="center">
+   <h4 align="center">
     :construction:  Projeto em construção  :construction:
     </h4>
