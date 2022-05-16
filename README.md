@@ -1,7 +1,6 @@
-<<<<<<< HEAD
+
 <h1>App de Orçamento Pessoal  </h1>
-=======
-<h1> App de Orçamento Pessoal </h1>
+
 
 <p align="center">
     Aplicativo desenvolvido para regsitra despessas pessoais: Saude, Alimentação, Educação, Lazer..
@@ -12,4 +11,3 @@
    <h4 align="center">
     :construction:  Projeto em construção  :construction:
     </h4>
->>>>>>> 45fc095bbcb761d91495eecc9e0e72ac8896f2c5
