@@ -1,4 +1,4 @@
-class Despesas {
+class Despesa {
     constructor(ano, mes, dia, tipo, descricao, valor){
         this.ano = ano
         this.mes = mes
@@ -10,7 +10,7 @@ class Despesas {
 
     validarDados(){
         for(let i in this){
-            if(this[i] == undefined || this[i] == '' || this[i] == null){
+            if(this[i] === null  || this[i] === '' || this[i] === undefined){
             return false
             }
         }
@@ -30,7 +30,7 @@ class Bd {
 
         getProximoId () {
             let proximoId = localStorage.getItem('id') 
-            return parseInt(proximoId) + 1
+            return (parseInt(proximoId) + 1)
         }
 
         gravar(d) {
@@ -43,18 +43,20 @@ class Bd {
 
         recuperarRegistro(){
 
-            //array das despesas
-            let despesas = Array()
+           //array de despesas recuperadas
+		let despesas = Array()
 
-            let id = localStorage.getItem('id')
+        //só testando o valor de qtdDeId
+		let id = localStorage.getItem('id')
 
-            //recuperar todas as despesas cadastradas em localStorage
-            for(let i = 1; i <= id; i ++){
+		    //recuperar todas as despesas cadastradas em localStorage
+            for(let i = 1; i <= id; i++) {
 
                 //recuperar a despesa
                 let despesa = JSON.parse(localStorage.getItem(i))
 
-                //existe a possibilidade de ter indices que foram removidos
+                //existe a possibilidade de haver índices que foram pulados/removidos
+                //nestes casos nós vamos pular esses índices
                 if(despesa === null) {
                     continue
                 }
@@ -62,7 +64,11 @@ class Bd {
                 despesas.push(despesa)
             }
 
+            return despesas
+        }
 
+        pesquisar(despesa){
+            console.log(despesa)
         }
 
 }
@@ -80,7 +86,7 @@ function cadastarDespesas() {
     let valor = document.getElementById('valor')
 
 
-    let despesa = new Despesas(
+    let despesa = new Despesa(
         ano.value, 
         mes.value, 
         dia.value, 
@@ -101,6 +107,14 @@ function cadastarDespesas() {
             //dialogo de sucesso
             $('#registraDespesa').modal('show')
 
+            // limpa os campos apos a gravação das despesas
+            ano.value = ''
+            mes.value = ''
+            dia.value = ''
+            tipo.value = ''
+            descricao.value = ''
+            valor.value = ''
+
         } else {
             document.getElementById('modal_titulo').innerHTML = 'Erro na registro da Despesa'
             document.getElementById('modal_titulo_div').className = 'modal-header text-danger'
@@ -115,30 +129,55 @@ function cadastarDespesas() {
 }
 
 function carregaListaDespesas() {
-    
+
     let despesas = Array()
 
-
+        //aqui eu recebo um array contendo em cada indice, o objeto com cada despesa
     despesas = bd.recuperarRegistro()
-
-        //selecionando o elemento tbody da tabela
-    var listaDespesas = document.getElementById('listaDespesas')
+    
+    //selecionando o elemento tbody da tabela
+    let listaDespesas = document.getElementById('listaDespesas')
 
     //percorrer o array despesas de forma dinamica
     despesas.forEach(function(d) {
-        console.log(d)
-
+        
         //criando a linha (tr)
-        let linha = listaDespesas.insertRow()
+        let linha = listaDespesas.insertRow();
 
         //criar as colunas (td)
+        linha.insertCell(0).innerHTML = `${d.dia}/${d.mes}/${d.ano}`
 
-        linha.insertCell(0).innerHTML = d.dia + '/' + d.mes + '/' + d.ano
-        linha.insertCell(1)
-        linha.insertCell(2)
-        linha.insertCell(3)
-        
+        //ajusta o tipo
+        switch(d.tipo){
+			case '1': d.tipo = 'Alimentação'
+				break
+			case '2': d.tipo = 'Educação'
+				break
+			case '3': d.tipo = 'Lazer'
+				break
+			case '4': d.tipo = 'Saúde'
+				break
+			case '5': d.tipo = 'Transporte'
+				break
+		}
+        linha.insertCell(1).innerHTML = d.tipo
+        linha.insertCell(2).innerHTML = d.descricao
+        linha.insertCell(3).innerHTML = d.valor
     })
+
+}
+
+function pesquisarDespesa(){
+    let ano = document.getElementById('ano').value
+    let mes = document.getElementById('mes').value
+    let dia = document.getElementById('dia').value
+    let tipo = document.getElementById('tipo').value
+    let descricao = document.getElementById('descricao').value
+    let valor = document.getElementById('valor').value
+
+    let despesa = new Despesa(ano, mes, dia, tipo, descricao, valor )
+
+    bd.pesquisar(despesa)
 }
 
 
